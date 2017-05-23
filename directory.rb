@@ -23,7 +23,7 @@ def input_students
   name = gets.chomp
   # while the name is not empty, repeat this code
   while !name.empty? do
-    if name[0] == "M"
+    if name.length < 12
     # add the student hash to the array
     students << {name: name, cohort: :november}
     end
