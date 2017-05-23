@@ -10,7 +10,7 @@ def print(students)
 end
 
 def print_footer(students)
-  puts "Overall, we have #{students.count} great students"
+  puts "Overall, we have #{students.count + 1} great students"
 end
 
 
@@ -23,11 +23,11 @@ def input_students
   name = gets.chomp
   # while the name is not empty, repeat this code
   while !name.empty? do
-    if name.length < 12
+    if name[0] == "M"
     # add the student hash to the array
     students << {name: name, cohort: :november}
     end
-    puts "Now we have #{students.count} students"
+    puts "Now we have #{students.count + 1} students"
     # get another name from the user
     name = gets.chomp
   end
