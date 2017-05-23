@@ -10,7 +10,7 @@ def print(students)
 end
 
 def print_footer(students)
-  puts "Overall, we have #{students.count } great students"
+  puts "Overall, we have #{students.count} great students"
 end
 
 
@@ -40,9 +40,7 @@ def input_letter(students)
   letter = gets.chomp
   puts ""
   spec_students = []
-  students.each do |key, value|
-
-
+  students.each do |key|
    if key[:name][0] == letter
       spec_students << {name: key[:name], cohort: :november}
     end
@@ -50,13 +48,31 @@ def input_letter(students)
   spec_students
 end
 
+def char_length(students)
+  spec_students = []
+  students.each do |key|
+   if key[:name].length < 12
+      spec_students << {name: key[:name], cohort: :november}
+    end
+  end
+  spec_students
+end
+
 students = input_students
-#nothing happens until we call the methods
+
+## NO CHANGES##
 #print_header
 #print(students)
 #print_footer(students)
 
-spec_students = input_letter(students)
+## FIRST LETTER MATCH ##
+#spec_students = input_letter(students)
+#print_header
+#print(spec_students)
+#print_footer(spec_students)
+
+## CHAR LENGTH MATCH ##
+spec_students = char_length(students)
 print_header
 print(spec_students)
 print_footer(spec_students)
