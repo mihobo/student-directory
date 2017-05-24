@@ -10,7 +10,11 @@ def print(students)
 end
 
 def print_footer(students)
-  puts "Overall, we have #{students.count} great students".center(110)
+  if students.length == 1
+    puts "Overall, we have #{students.count} great student".center(110)
+  else
+    puts "Overall, we have #{students.count} great students".center(110)
+  end
 end
 
 
@@ -23,18 +27,39 @@ def input_students
   name = gets.chomp
   # while the name is not empty, repeat this code
   while !name.empty? do
+    puts "Please enter your cohort"
+    cohort = gets.chomp
+      if cohort.empty?
+        cohort = "unknown"
+      end
     puts "Please enter their hobbies"
     hobbies = gets.chomp
+      if hobbies.empty?
+        hobbies = "none"
+      end
     puts "Please enter their country of birth"
     country = gets.chomp
+      if country.empty?
+        country = "unknown"
+      end
     puts "Please enter their height"
     height = gets.chomp
-    puts "Please enter anything else required or none"
+      if height.empty?
+        height = "unknown"
+      end
+    puts "Please enter any allergies or none"
     other = gets.chomp
+      if other.empty?
+        other = "unknown"
+      end
     # add the student hash to the array
-    students << {name: name, cohort: :november, hobbies: hobbies, country: country, height: height, other: other}
+    students << {name: name, cohort: cohort, hobbies: hobbies, country: country, height: height, other: other}
     puts ""
-    puts "Now we have #{students.count} students"
+      if students.length == 1
+        puts "Now we have #{students.count} student"
+      else
+        puts "Now we have #{students.count} students"
+      end
     puts "Please enter another student name"
     puts "To end data entry, return twice"
     # get another name from the user
