@@ -4,9 +4,15 @@ def print_header
 end
 
 def print(students)
-    students.each_with_index do |student, index|
-    puts "#{index + 1}: #{student[:name]}, (#{student[:cohort]} cohort, Hobbies: #{student[:hobbies]}, Country: #{student[:country]}, Height: #{student[:height]}, Other: #{student[:other]})".center(110)
-  end
+  grouped_by_cohort = students.sort_by { |student| student[:cohort]}
+
+  grouped_by_cohort.each_with_index do |student, index|
+    # put a month after the == to narrow down to a specific cohort
+    #if "#{student[:cohort]}" == " "
+      puts "#{index + 1}: #{student[:name]}, (#{student[:cohort]} cohort, Hobbies: #{student[:hobbies]}, Country: #{student[:country]}, Height: #{student[:height]}, Other: #{student[:other]})".center(110)
+    #else
+    #  end
+    end
 end
 
 def print_footer(students)
