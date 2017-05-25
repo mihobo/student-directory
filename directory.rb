@@ -32,23 +32,23 @@ def input_students
       if cohort.empty?
         cohort = "unknown"
       end
-    puts "Please enter their hobbies"
-    hobbies = gets.chomp
+      puts "Please enter their hobbies"
+      hobbies = gets.chomp
       if hobbies.empty?
         hobbies = "none"
       end
-    puts "Please enter their country of birth"
-    country = gets.chomp
+      puts "Please enter their country of birth"
+      country = gets.chomp
       if country.empty?
         country = "unknown"
       end
-    puts "Please enter their height"
-    height = gets.chomp
+      puts "Please enter their height"
+      height = gets.chomp
       if height.empty?
         height = "unknown"
       end
-    puts "Please enter any allergies or none"
-    other = gets.chomp
+      puts "Please enter any allergies or none"
+      other = gets.chomp
       if other.empty?
         other = "unknown"
       end
@@ -60,8 +60,8 @@ def input_students
       else
         puts "Now we have #{students.count} students"
       end
-    puts "Please enter another student name"
-    puts "To end data entry, return twice"
+      puts "Please enter another student name"
+      puts "To end data entry, return twice"
     # get another name from the user
     name = gets.chomp
   end
@@ -94,12 +94,24 @@ def char_length(students)
   spec_students
 end
 
+def show_results(students)
+  while students.count == 0
+    puts "No student data found - no list to print"
+    puts "Please enter the name of at least 1 student to continue"
+    students = input_students
+  end
+    print_header
+    print(students)
+    print_footer(students)
+end
+
 students = input_students
+program = show_results(students)
 
 ## NO CHANGES##
-print_header
-print(students)
-print_footer(students)
+#print_header
+#print(students)
+#print_footer(students)
 
 ## FIRST LETTER MATCH ##
 #spec_students = input_letter(students)
