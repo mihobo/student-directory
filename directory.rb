@@ -111,13 +111,40 @@ def show_results(students)
     print_footer(students)
 end
 
-students = input_students
+def interactive_menu
+  students = []
+  loop do
+    # 1. print the menu and ask the user what they want
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "9. Exit" # we'll be adding more items hence the 9
+    # 2. read the input and save it as a variable
+    selection = gets.chomp
+    # 3. do what the user asked
+    case selection
+    when "1"
+      students = input_students
+    when "2"
+      print_header
+      print(students)
+      print_footer(students)
+    when "9"
+      exit # this terminates the program
+    else
+      puts "Invalid input, try again"
+    end
+  end
+end
+
+interactive_menu
+#students = input_students
+
 #program = show_results(students)
 
 ## NO CHANGES##
-print_header
-print(students)
-print_footer(students)
+#print_header
+#print(students)
+#print_footer(students)
 
 ## FIRST LETTER MATCH ##
 #spec_students = input_letter(students)
