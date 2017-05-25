@@ -24,31 +24,31 @@ def input_students
   #create an empty array
   students = []
   # get the first name
-  name = gets.chomp
-  # while the name is not empty, repeat this code
+  name = gets.gsub("\n",'')
+  # while the name is not empty, repeat this code **
   while !name.empty? do
     puts "Please enter your cohort"
-    cohort = gets.chomp
+    cohort = gets.delete("\n") # **gsub or delete will both remove the new line
       if cohort.empty?
         cohort = "unknown"
       end
       puts "Please enter their hobbies"
-      hobbies = gets.chomp
+      hobbies = gets.delete("\n")
       if hobbies.empty?
         hobbies = "none"
       end
       puts "Please enter their country of birth"
-      country = gets.chomp
+      country = gets.delete("\n")
       if country.empty?
         country = "unknown"
       end
       puts "Please enter their height"
-      height = gets.chomp
+      height = gets.delete("\n")
       if height.empty?
         height = "unknown"
       end
       puts "Please enter any allergies or none"
-      other = gets.chomp
+      other = gets.delete("\n")
       if other.empty?
         other = "unknown"
       end
@@ -63,7 +63,7 @@ def input_students
       puts "Please enter another student name"
       puts "To end data entry, return twice"
     # get another name from the user
-    name = gets.chomp
+    name = gets.gsub("\n",'')
   end
   # return the array of students
   students
@@ -106,12 +106,12 @@ def show_results(students)
 end
 
 students = input_students
-program = show_results(students)
+#program = show_results(students)
 
 ## NO CHANGES##
-#print_header
-#print(students)
-#print_footer(students)
+print_header
+print(students)
+print_footer(students)
 
 ## FIRST LETTER MATCH ##
 #spec_students = input_letter(students)
