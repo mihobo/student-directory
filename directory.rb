@@ -59,8 +59,10 @@ def input_students
       if other.empty?
         other = "unknown"
       end
+    ## DRY to add_to_students_array method
+    # @students << {name: name, cohort: cohort, hobbies: hobbies, country: country, height: height, other: other}
     # add the student hash to the array
-    @students << {name: name, cohort: cohort, hobbies: hobbies, country: country, height: height, other: other}
+    add_to_students_array(name, cohort, hobbies, country, height, other)
     puts ""
       if @students.length == 1
         puts "Now we have #{@students.count} student"
@@ -166,7 +168,9 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, hobbies, country, height, other = line.chomp.split(',')
-    @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, country: country, height: height, other: other}
+    ## DRY to add_to_students_array method
+    # @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, country: country, height: height, other: other}
+  add_to_students_array(name, cohort, hobbies, country, height, other)
   end
   file.close
 end
@@ -181,6 +185,10 @@ def try_load_students
     puts "Sorry, #{filename} doesn't exist."
     exit # quit the program
   end
+end
+
+def add_to_students_array(name, cohort, hobbies, country, height, other)
+  @students << {name: name, cohort: cohort, hobbies: hobbies, country: country, height: height, other: other}
 end
 
 try_load_students
