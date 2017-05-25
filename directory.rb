@@ -1,10 +1,12 @@
+@students = [] # an empty array accessible to all methods
+
 def print_header
   puts "The students of Villains Academy".center(110)
   puts "--------------------------------".center(110)
 end
 
-def print(students)
-  grouped_by_cohort = students.sort_by { |student| student[:cohort]}
+def print_students_list
+  grouped_by_cohort = @students.sort_by { |student| student[:cohort]}
 
   grouped_by_cohort.each_with_index do |student, index|
     # put a month after the == to narrow down to a specific cohort
@@ -15,11 +17,11 @@ def print(students)
     end
 end
 
-def print_footer(students)
-  if students.length == 1
-    puts "Overall, we have #{students.count} great student".center(110)
+def print_footer
+  if @students.length == 1
+    puts "Overall, we have #{@students.count} great student".center(110)
   else
-    puts "Overall, we have #{students.count} great students".center(110)
+    puts "Overall, we have #{@students.count} great students".center(110)
   end
 end
 
@@ -27,8 +29,6 @@ end
 def input_students
   puts "Please enter the name of the student"
   puts "To end data entry, return twice"
-  #create an empty array
-  students = []
   # get the first name
   name = gets.gsub("\n",'')
   # while the name is not empty, repeat this code **
@@ -59,12 +59,12 @@ def input_students
         other = "unknown"
       end
     # add the student hash to the array
-    students << {name: name, cohort: cohort, hobbies: hobbies, country: country, height: height, other: other}
+    @students << {name: name, cohort: cohort, hobbies: hobbies, country: country, height: height, other: other}
     puts ""
-      if students.length == 1
-        puts "Now we have #{students.count} student"
+      if @students.length == 1
+        puts "Now we have #{@students.count} student"
       else
-        puts "Now we have #{students.count} students"
+        puts "Now we have #{@students.count} students"
       end
       puts "Please enter another student name"
       puts "To end data entry, return twice"
@@ -72,7 +72,6 @@ def input_students
     name = gets.gsub("\n",'')
   end
   # return the array of students
-  students
 end
 
 
@@ -112,29 +111,38 @@ def show_results(students)
 end
 
 def interactive_menu
-  students = []
   loop do
     # 1. print the menu and ask the user what they want
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "9. Exit" # we'll be adding more items hence the 9
-    # 2. read the input and save it as a variable
-    selection = gets.chomp
-    # 3. do what the user asked
-    case selection
-    when "1"
-      students = input_students
-    when "2"
-      print_header
-      print(students)
-      print_footer(students)
-    when "9"
-      exit # this terminates the program
-    else
-      puts "Invalid input, try again"
-    end
+    print_menu
+    process(gets.chomp)
   end
 end
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
+end
+
+def show_students
+  print_header
+  print_students_list
+  print_footer
+end
+
+def process(selection)
+  case selection
+  when "1"
+    input_students
+  when "2"
+    show_students
+  when "9"
+    exit
+  else
+    puts "Invalid input, try again"
+  end
+end
+
 
 interactive_menu
 #students = input_students
