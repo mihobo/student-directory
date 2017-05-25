@@ -31,31 +31,31 @@ def input_students
   puts "Please enter the name of the student"
   puts "To end data entry, return twice"
   # get the first name
-  name = gets.gsub("\n",'')
+  name = STDIN.gets.gsub("\n",'')
   # while the name is not empty, repeat this code **
   while !name.empty? do
     puts "Please enter your cohort"
-    cohort = gets.delete("\n") # **gsub or delete will both remove the new line
+    cohort = STDIN.gets.delete("\n") # **gsub or delete will both remove the new line
       if cohort.empty?
         cohort = "unknown"
       end
       puts "Please enter their hobbies"
-      hobbies = gets.delete("\n")
+      hobbies = STDIN.gets.delete("\n")
       if hobbies.empty?
         hobbies = "none"
       end
       puts "Please enter their country of birth"
-      country = gets.delete("\n")
+      country = STDIN.gets.delete("\n")
       if country.empty?
         country = "unknown"
       end
       puts "Please enter their height"
-      height = gets.delete("\n")
+      height = STDIN.gets.delete("\n")
       if height.empty?
         height = "unknown"
       end
       puts "Please enter any allergies or none"
-      other = gets.delete("\n")
+      other = STDIN.gets.delete("\n")
       if other.empty?
         other = "unknown"
       end
@@ -70,7 +70,7 @@ def input_students
       puts "Please enter another student name"
       puts "To end data entry, return twice"
     # get another name from the user
-    name = gets.gsub("\n",'')
+    name = STDIN.gets.gsub("\n",'')
   end
   # return the array of students
 end
@@ -115,7 +115,7 @@ def interactive_menu
   loop do
     # 1. print the menu and ask the user what they want
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -162,8 +162,8 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, hobbies, country, height, other = line.chomp.split(',')
     @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, country: country, height: height, other: other}
@@ -171,6 +171,19 @@ def load_students
   file.close
 end
 
+def try_load_students
+  filename = ARGV.first # first argument from the cmd line
+  return if filename.nil? # get out of the method if not given
+  if File.exists?(filename) # if it exists
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else # if it doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit # quit the program
+  end
+end
+
+try_load_students
 interactive_menu
 #students = input_students
 
