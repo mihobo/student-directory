@@ -1,29 +1,29 @@
 @students = [] # an empty array accessible to all methods
+@spec_students = []
 
 def print_header
-  puts "The students of Villains Academy".center(110)
-  puts "--------------------------------".center(110)
+  puts "The students of Villains Academy".center(120)
+  puts "--------------------------------".center(120)
 end
 
 def print_students_list
   #grouped_by_cohort = @students.sort_by { |student| student[:cohort]}
-
   #grouped_by_cohort.each_with_index do |student, index|
     # put a month after the == to narrow down to a specific cohort
     #if "#{student[:cohort]}" == " "
     @students.each_with_index do |student, index|
-      puts "#{index + 1}: #{student[:name]}, (#{student[:cohort]} cohort, Hobbies: #{student[:hobbies]}, Country: #{student[:country]}, Height: #{student[:height]}, Other: #{student[:other]})".center(110)
+      puts "#{index + 1}: #{student[:name]}, (#{student[:cohort]} cohort, Hobbies: #{student[:hobbies]}, Country: #{student[:country]}, Height: #{student[:height]}, Other: #{student[:other]})".center(120)
     #else
     #  end
     end
 end
 
 def print_footer
+  word = "students"
   if @students.length == 1
-    puts "Overall, we have #{@students.count} great student".center(110)
-  else
-    puts "Overall, we have #{@students.count} great students".center(110)
+    word = "student"
   end
+    puts ("Overall, we have #{@students.count} great " + word).center(120)
 end
 
 
@@ -64,11 +64,11 @@ def input_students
     # add the student hash to the array
     add_to_students_array(name, cohort, hobbies, country, height, other)
     puts ""
-      if @students.length == 1
-        puts "Now we have #{@students.count} student"
-      else
-        puts "Now we have #{@students.count} students"
-      end
+    word = "students"
+    if @students.length == 1
+      word = "student"
+    end
+      puts "Now we have #{@students.count} " + word
       puts "Please enter another student name"
       puts "To end data entry, return twice"
     # get another name from the user
@@ -83,23 +83,21 @@ def input_letter(students)
   puts "Please choose a letter to return a list of students beginning with that letter"
   letter = gets.chomp
   puts ""
-  spec_students = []
   students.each do |key|
    if key[:name][0] == letter
-      spec_students << {name: key[:name], cohort: :november}
+      add_to_spec_array(name, cohort)
     end
   end
-  spec_students
+  @spec_students
 end
 
 def char_length(students)
-  spec_students = []
   students.each do |key|
    if key[:name].length < 12
-      spec_students << {name: key[:name], cohort: :november}
+      add_to_spec_array(name, cohort)
     end
   end
-  spec_students
+  @spec_students
 end
 
 def show_results(students)
@@ -158,40 +156,52 @@ def save_students
   #iterate over the array of students
   @students.each do |student|
     student_data = [student[:name], student[:cohort], student[:hobbies], student[:country], student[:height], student[:other]]
-    csv_line = student_data.join(", ")
+    csv_line = student_data.join(",")
     file.puts csv_line
   end
   file.close
 end
 
 def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, cohort, hobbies, country, height, other = line.chomp.split(',')
-    ## DRY to add_to_students_array method
-    # @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, country: country, height: height, other: other}
-  add_to_students_array(name, cohort, hobbies, country, height, other)
-  end
-  file.close
-end
-
-def try_load_students
-  filename = ARGV.first # first argument from the cmd line
-  return if filename.nil? # get out of the method if not given
+   # get out of the method if not given
   if File.exists?(filename) # if it exists
-    load_students(filename)
+    file = File.open(filename, "r")
+    file.readlines.each do |line|
+      name, cohort, hobbies, country, height, other = line.chomp.split(',')
+      ## DRY to add_to_students_array method
+      # @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, country: country, height: height, other: other}
+      add_to_students_array(name, cohort, hobbies, country, height, other)
+    end
+  file.close
     puts "Loaded #{@students.count} from #{filename}"
   else # if it doesn't exist
-    puts "Sorry, #{filename} doesn't exist."
-    exit # quit the program
+    puts "Unable to load student data. Please input some student data (option 1) to continue."
   end
 end
+
+#def try_load_students
+#  filename = ARGV.first # first argument from the cmd line
+#  return if filename.nil? # get out of the method if not given
+#  if File.exists?(filename) # if it exists
+#    load_students(filename)
+#    puts "Loaded #{@students.count} from #{filename}"
+#  else # if it doesn't exist
+#    puts "Sorry, #{filename} doesn't exist."
+#    exit # quit the program
+#  end
+#end
 
 def add_to_students_array(name, cohort, hobbies, country, height, other)
   @students << {name: name, cohort: cohort, hobbies: hobbies, country: country, height: height, other: other}
 end
 
-try_load_students
+def add_to_spec_array(name, cohort)
+  @spec_students << {name: key[:name], cohort: :november}
+end
+
+
+#try_load_students
+load_students
 interactive_menu
 #students = input_students
 
