@@ -68,9 +68,11 @@ def input_students
     if @students.length == 1
       word = "student"
     end
+      puts "Input data entry succesful"
+      puts ""
       puts "Now we have #{@students.count} " + word
       puts "Please enter another student name"
-      puts "To end data entry, return twice"
+      puts "To end data entry, return twice."
     # get another name from the user
     name = STDIN.gets.gsub("\n",'')
   end
@@ -131,6 +133,9 @@ def show_students
   print_header
   print_students_list
   print_footer
+  puts ""
+  puts "List displayed successfully."
+  puts ""
 end
 
 def process(selection)
@@ -144,9 +149,13 @@ def process(selection)
   when "4"
     load_students
   when "9"
+    puts ""
+    puts "Exiting the program. Goodbye"
     exit
   else
+    puts ""
     puts "Invalid input, try again"
+    puts ""
   end
 end
 
@@ -160,6 +169,9 @@ def save_students
     file.puts csv_line
   end
   file.close
+  puts ""
+  puts "You have successfully saved your input data."
+  puts ""
 end
 
 def load_students(filename = "students.csv")
@@ -174,6 +186,7 @@ def load_students(filename = "students.csv")
     end
   file.close
     puts "Loaded #{@students.count} from #{filename}"
+    puts ""
   else # if it doesn't exist
     puts "Unable to load student data. Please input some student data (option 1) to continue."
   end
