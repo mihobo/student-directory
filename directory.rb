@@ -35,27 +35,27 @@ def input_students
   # while the name is not empty, repeat this code **
   while !name.empty? do
     puts "Please enter your cohort"
-    cohort = STDIN.gets.delete("\n") # **gsub or delete will both remove the new line
+    cohort = STDIN.gets.gsub("\n",'') # **gsub or delete will both remove the new line
       if cohort.empty?
         cohort = "unknown"
       end
       puts "Please enter their hobbies"
-      hobbies = STDIN.gets.delete("\n")
+      hobbies = STDIN.gets.gsub("\n",'')
       if hobbies.empty?
         hobbies = "none"
       end
       puts "Please enter their country of birth"
-      country = STDIN.gets.delete("\n")
+      country = STDIN.gets.gsub("\n",'')
       if country.empty?
         country = "unknown"
       end
       puts "Please enter their height"
-      height = STDIN.gets.delete("\n")
+      height = STDIN.gets.gsub("\n",'')
       if height.empty?
         height = "unknown"
       end
       puts "Please enter any allergies or none"
-      other = STDIN.gets.delete("\n")
+      other = STDIN.gets.gsub("\n",'')
       if other.empty?
         other = "unknown"
       end
@@ -68,7 +68,7 @@ def input_students
     if @students.length == 1
       word = "student"
     end
-      puts "Input data entry succesful"
+      puts "Input data entry successful"
       puts ""
       puts "Now we have #{@students.count} " + word
       puts "Please enter another student name"
@@ -124,8 +124,8 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save file"
+  puts "4. Load file"
   puts "9. Exit"
 end
 
@@ -160,35 +160,78 @@ def process(selection)
 end
 
 def save_students
-  #open the file for writing
-  file = File.open("students.csv", "w")
-  #iterate over the array of students
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort], student[:hobbies], student[:country], student[:height], student[:other]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
-  end
-  file.close
+  puts "Would you like to add the data to the existing file? Please enter Y or N"
+  reply = STDIN.gets.chomp.upcase
+    if reply == "Y"
+      #open the file for writing
+      file = File.open("students.csv", "w")
+      #iterate over the array of students
+      @students.each do |student|
+        student_data = [student[:name], student[:cohort], student[:hobbies], student[:country], student[:height], student[:other]]
+        csv_line = student_data.join(",")
+        file.puts csv_line
+        end
+        file.close
+        puts "New data added."
+    elsif reply == "N"
+      puts "Please enter a new filename with no spaces"
+      new_file = STDIN.gets.chomp
+      file = File.open(new_file, "w")
+      @students.each do |student|
+        student_data = [student[:name], student[:cohort], student[:hobbies], student[:country], student[:height], student[:other]]
+        csv_line = student_data.join(",")
+        file.puts csv_line
+        end
+        file.close
+        "New file with new filename created."
+    else
+      puts "Invalid input"
+      save_students
+    end
   puts ""
   puts "You have successfully saved your input data."
   puts ""
 end
 
 def load_students(filename = "students.csv")
-   # get out of the method if not given
-  if File.exists?(filename) # if it exists
-    file = File.open(filename, "r")
-    file.readlines.each do |line|
-      name, cohort, hobbies, country, height, other = line.chomp.split(',')
-      ## DRY to add_to_students_array method
-      # @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, country: country, height: height, other: other}
-      add_to_students_array(name, cohort, hobbies, country, height, other)
-    end
-  file.close
-    puts "Loaded #{@students.count} from #{filename}"
-    puts ""
-  else # if it doesn't exist
-    puts "Unable to load student data. Please input some student data (option 1) to continue."
+  puts "Do you want to load the default file or load a new file? Please enter D or N "
+  @students = []
+  reply = STDIN.gets.chomp.upcase
+    if reply == "D" && File.exists?(filename) # if it exists
+      file = File.open(filename, "r")
+      read_lines(file)
+    #DRY  file.readlines.each do |line|
+    #    name, cohort, hobbies, country, height, other = line.chomp.split(',')
+        ## DRY to add_to_students_array method
+        # @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, country: country, height: height, other: other}
+    #    add_to_students_array(name, cohort, hobbies, country, height, other)
+    #  end
+    file.close
+      puts "Loaded #{@students.count} from #{filename}"
+      puts ""
+    elsif reply == "N"
+        puts "Please enter the filename you would like to load"
+        new_load = STDIN.gets.chomp
+        file = File.open(new_load, "r")
+        read_lines(file)
+    #DRY    file.readlines.each do |line|
+    #      name, cohort, hobbies, country, height, other = line.chomp.split(',')
+          ## DRY to add_to_students_array method
+          # @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, country: country, height: height, other: other}
+    #      add_to_students_array(name, cohort, hobbies, country, height, other)
+    #    end
+      file.close
+        puts "Loaded #{@students.count} from #{filename}"
+        puts ""
+    else # if it doesn't exist
+      puts "Unable to load student data. Please input some student data (option 1) to continue."
+  end
+end
+
+def read_lines(file)
+  file.readlines.each do |line|
+    name, cohort, hobbies, country, height, other = line.chomp.split(',')
+    add_to_students_array(name, cohort, hobbies, country, height, other)
   end
 end
 
