@@ -160,35 +160,36 @@ def process(selection)
 end
 
 def save_students
-  puts "Would you like to add the data to the existing file? Please enter Y or N"
+  puts "Would you like to add the data to the default file? Please enter Y or N"
   reply = STDIN.gets.chomp.upcase
     if reply == "Y"
       #open the file for writing
-      file = File.open("students.csv", "w")
+      file = File.open("students.csv", "w"){|file| save_data(file)}
       #iterate over the array of students
-      @students.each do |student|
-        student_data = [student[:name], student[:cohort], student[:hobbies], student[:country], student[:height], student[:other]]
-        csv_line = student_data.join(",")
-        file.puts csv_line
-        end
-        file.close
+#DRY     @students.each do |student|
+#        student_data = [student[:name], student[:cohort], student[:hobbies], student[:country], student[:height], student[:other]]
+#        csv_line = student_data.join(",")
+#        file.puts csv_line
+#        end
+#        file.close
+        puts ""
         puts "New data added."
     elsif reply == "N"
-      puts "Please enter a new filename with no spaces"
+      puts "Please enter a (new) filename with no spaces"
       new_file = STDIN.gets.chomp
-      file = File.open(new_file, "w")
-      @students.each do |student|
-        student_data = [student[:name], student[:cohort], student[:hobbies], student[:country], student[:height], student[:other]]
-        csv_line = student_data.join(",")
-        file.puts csv_line
-        end
-        file.close
-        "New file with new filename created."
+      file = File.open(new_file, "w"){|file| save_data(file)}
+# DRY    @students.each do |student|
+#        student_data = [student[:name], student[:cohort], student[:hobbies], student[:country], student[:height], student[:other]]
+#        csv_line = student_data.join(",")
+#        file.puts csv_line
+#        end
+#        file.close
+        puts ""
+        puts "New data added to chosen file."
     else
       puts "Invalid input"
       save_students
     end
-  puts ""
   puts "You have successfully saved your input data."
   puts ""
 end
@@ -253,6 +254,14 @@ end
 
 def add_to_spec_array(name, cohort)
   @spec_students << {name: key[:name], cohort: :november}
+end
+
+def save_data(file)
+  @students.each do |student|
+    student_data = [student[:name], student[:cohort], student[:hobbies], student[:country], student[:height], student[:other]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
 end
 
 
