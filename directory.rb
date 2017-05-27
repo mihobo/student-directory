@@ -1,3 +1,4 @@
+require 'csv'
 @students = [] # an empty array accessible to all methods
 @spec_students = []
 
@@ -164,7 +165,9 @@ def save_students
   reply = STDIN.gets.chomp.upcase
     if reply == "Y"
       #open the file for writing
-      file = File.open("students.csv", "w"){|file| save_data(file)}
+#      file = File.open("students.csv", "w"){|file| save_data(file)}
+      file = "students.csv"
+      save_data(file)
       #iterate over the array of students
 #DRY     @students.each do |student|
 #        student_data = [student[:name], student[:cohort], student[:hobbies], student[:country], student[:height], student[:other]]
@@ -172,20 +175,21 @@ def save_students
 #        file.puts csv_line
 #        end
 #        file.close
-        puts ""
-        puts "New data added."
+      puts ""
+      puts "New data added."
     elsif reply == "N"
       puts "Please enter a (new) filename with no spaces"
       new_file = STDIN.gets.chomp
-      file = File.open(new_file, "w"){|file| save_data(file)}
+#      file = File.open(new_file, "w"){|file| save_data(file)}
+      save_data(new_file)
 # DRY    @students.each do |student|
 #        student_data = [student[:name], student[:cohort], student[:hobbies], student[:country], student[:height], student[:other]]
 #        csv_line = student_data.join(",")
 #        file.puts csv_line
 #        end
 #        file.close
-        puts ""
-        puts "New data added to chosen file."
+      puts ""
+      puts "New data added to chosen file."
     else
       puts "Invalid input"
       save_students
@@ -199,30 +203,31 @@ def load_students(filename = "students.csv")
   @students = []
   reply = STDIN.gets.chomp.upcase
     if reply == "D" && File.exists?(filename) # if it exists
-      file = File.open(filename, "r")
-      read_lines(file)
+    #  file = CSV.read("students.csv")
+#      file = File.open(filename, "r")
+      read_lines(filename)
     #DRY  file.readlines.each do |line|
     #    name, cohort, hobbies, country, height, other = line.chomp.split(',')
         ## DRY to add_to_students_array method
         # @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, country: country, height: height, other: other}
     #    add_to_students_array(name, cohort, hobbies, country, height, other)
     #  end
-    file.close
+#    file.close
       puts "Loaded #{@students.count} from #{filename}"
       puts ""
     elsif reply == "N"
         puts "Please enter the filename you would like to load"
         new_load = STDIN.gets.chomp
-        file = File.open(new_load, "r")
-        read_lines(file)
+#        file = File.open(new_load, "r")
+        read_lines(new_load)
     #DRY    file.readlines.each do |line|
     #      name, cohort, hobbies, country, height, other = line.chomp.split(',')
           ## DRY to add_to_students_array method
           # @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, country: country, height: height, other: other}
     #      add_to_students_array(name, cohort, hobbies, country, height, other)
     #    end
-      file.close
-        puts "Loaded #{@students.count} from #{filename}"
+#      file.close
+        puts "Loaded #{@students.count} from #{new_load}"
         puts ""
     else # if it doesn't exist
       puts "Unable to load student data. Please input some student data (option 1) to continue."
@@ -230,10 +235,14 @@ def load_students(filename = "students.csv")
 end
 
 def read_lines(file)
-  file.readlines.each do |line|
-    name, cohort, hobbies, country, height, other = line.chomp.split(',')
+  CSV.foreach(file) do |line|
+    name, cohort, hobbies, country, height, other = line.to_s.chomp.gsub("[\"","").gsub("\"]","").gsub("\"","").split(",")
     add_to_students_array(name, cohort, hobbies, country, height, other)
   end
+  #file.each do |line|
+    #name, cohort, hobbies, country, height, other = line.chomp.split(',')
+    #add_to_students_array(name, cohort, hobbies, country, height, other)
+  #end
 end
 
 #def try_load_students
@@ -257,11 +266,13 @@ def add_to_spec_array(name, cohort)
 end
 
 def save_data(file)
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort], student[:hobbies], student[:country], student[:height], student[:other]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+  CSV.open(file, "w") do |file|
+    @students.each {|student| file << [student[:name], student[:cohort], student[:hobbies], student[:country], student[:height], student[:other]]}
   end
+  #@students.each do |student|
+  #  student_data = [student[:name], student[:cohort], student[:hobbies], student[:country], student[:height], student[:other]]
+  #  csv_line = student_data.join(",")
+  #  file.puts csv_line
 end
 
 
